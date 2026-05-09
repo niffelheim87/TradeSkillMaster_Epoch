@@ -76,6 +76,7 @@ function TSM:RegisterModule()
 		{ key = "lastCompleteScanTime", callback = TSM.GetLastCompleteScanTime },
 		{ key = "adbScans", callback = TSM.GetScans },
 		{ key = "adbOppositeFaction", callback = TSM.GetOppositeFactionData },
+		{ key = "updateFromShopping", callback = function(data) TSM.Scan:UpdateFromShoppingResults(data) end },
 	}
 	TSM.tooltipOptions = {callback = "Config:LoadTooltipOptions"}
 	TSMAPI:NewModule(TSM)
@@ -226,6 +227,17 @@ end
 
 function TSM:OnTSMDBShutdown()
 	TSM.db.factionrealm.time = 0
+	-- Si hay datos procesándose en batches asíncronos, los forzamos a terminar
+	-- antes de serializar, para que no se pierdan al cerrar el juego.
+	if TSM.processingData then
+		TSMAPI:CancelFrame("adbProcessDelay")
+		TSM.processingData = nil
+		for itemID, data in pairs(TSM.data) do
+			if not data.encoded then
+				TSM:EncodeItemData(itemID)
+			end
+		end
+	end
 	TSM:Serialize(TSM.data)
 end
 
@@ -292,7 +304,7 @@ function TSM:GetTooltip(itemString, quantity)
 			end
 			local timeDiff = SecondsToTime(time() - lastScan)		
 			--tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = "|cffffffff" .. format(L["%s ago"], timeDiff) })
-			tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = format("%s (%s)", format("|cffffffff".."%d auctions".."|r", TSM.data[itemID].quantity), format(timeColor..L["%s ago"].."|r", timeDiff)) })
+			tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = format("%s (%s)", format("|cffffffff".."%d auctions".."|r", TSM.data[itemID].quantity or 0), format(timeColor..L["%s ago"].."|r", timeDiff)) })
 		else
 			tinsert(text, 1, { left = "|cffffff00" .. "TSM AuctionDB:", right = "|cffffffff" .. L["Not Scanned"] })
 		end
