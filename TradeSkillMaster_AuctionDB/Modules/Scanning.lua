@@ -460,6 +460,31 @@ function Scan:ScanNextGroupFilter(data)
 	TSMAPI.AuctionScan:RunQuery(Scan.filterList[1], GroupScanCallback)
 end
 
+-- Actualiza AuctionDB con los resultados de una búsqueda manual de Shopping.
+-- Se llama desde TSM_Shopping cuando termina una búsqueda exacta de un item.
+-- scanData: mismo formato de tabla que recibe GroupScanCallback en SCAN_COMPLETE.
+function Scan:UpdateFromShoppingResults(scanData)
+	if not scanData then return end
+
+	-- Procesamos como si fuera un group scan para no sobreescribir lastCompleteScan global.
+	local savedIsScanning = Scan.isScanning
+	local savedLastComplete = TSM.db.factionrealm.lastCompleteScan
+
+	Scan.isScanning = "group"
+
+	-- Forzamos lastCompleteScan al tiempo actual para que los items reciban timestamp fresco.
+	TSM.db.factionrealm.lastCompleteScan = time()
+
+	Scan:ProcessScanData(scanData)
+
+	-- Restauramos en el siguiente frame, después del tick inicial de ProcessData,
+	-- para no interferir con el procesado asíncrono por batches.
+	TSMAPI:CreateTimeDelay("adbShoppingRestoreState", 0.2, function()
+		TSM.db.factionrealm.lastCompleteScan = savedLastComplete
+		Scan.isScanning = savedIsScanning
+	end)
+end
+
 function Scan:StartGroupScan(items)
 	Scan.isScanning = "Group"
 	Scan.isBuggedGetAll = nil
