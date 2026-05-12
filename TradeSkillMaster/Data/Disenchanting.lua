@@ -446,19 +446,50 @@ data.disenchant = {
 				},
 			},
 		},
-		["item:11082:0:0:0:0:0:0"] = {
-			-- Greater Astral Essence
-			name = GetItemInfo("item:11082:0:0:0:0:0:0"),
+		["item:11081:0:0:0:0:0:0"] = {
+			-- Lesser Astral Essence
+			name = GetItemInfo("item:11081:0:0:0:0:0:0"),
 			minLevel = 16,
 			maxLevel = 25,
 			itemTypes = {
 				[ARMOR] = {
 					[2] = {
 						{
+							minItemLevel = 16,
+							maxItemLevel = 20,
+							amountOfMats = 0.375 -- 1-2, 75% chance = 1.5*0.75/3
+						},
+						{
 							minItemLevel = 21,
 							maxItemLevel = 25,
-							amountOfMats = .075
+							amountOfMats = 0.225 -- 1-2, 15% chance = 1.5*0.15
 						},
+					},
+				},
+				[WEAPON] = {
+					[2] = {
+						{
+							minItemLevel = 16,
+							maxItemLevel = 20,
+							amountOfMats = 1.125 -- 1-2, 75% chance = 1.5*0.75
+						},
+						{
+							minItemLevel = 21,
+							maxItemLevel = 25,
+							amountOfMats = 1.125 -- 1-2, 75% chance = 1.5*0.75 (Bronze Axe ilvl23)
+						},
+					},
+				},
+			},
+		},
+		["item:11082:0:0:0:0:0:0"] = {
+			-- Greater Astral Essence
+			name = GetItemInfo("item:11082:0:0:0:0:0:0"),
+			minLevel = 21,
+			maxLevel = 30,
+			itemTypes = {
+				[ARMOR] = {
+					[2] = {
 						{
 							minItemLevel = 26,
 							maxItemLevel = 30,
@@ -468,11 +499,6 @@ data.disenchant = {
 				},
 				[WEAPON] = {
 					[2] = {
-						{
-							minItemLevel = 21,
-							maxItemLevel = 25,
-							amountOfMats = 0.375
-						},
 						{
 							minItemLevel = 26,
 							maxItemLevel = 30,
@@ -482,19 +508,50 @@ data.disenchant = {
 				},
 			},
 		},
-		["item:11135:0:0:0:0:0:0"] = {
-			-- Greater Mystic Essence
-			name = GetItemInfo("item:11135:0:0:0:0:0:0"),
+		["item:11134:0:0:0:0:0:0"] = {
+			-- Lesser Mystic Essence
+			name = GetItemInfo("item:11134:0:0:0:0:0:0"),
 			minLevel = 26,
 			maxLevel = 35,
 			itemTypes = {
 				[ARMOR] = {
 					[2] = {
 						{
+							minItemLevel = 26,
+							maxItemLevel = 30,
+							amountOfMats = 0.375 -- 1-2, 75% chance = 1.5*0.75/3
+						},
+						{
 							minItemLevel = 31,
 							maxItemLevel = 35,
-							amountOfMats = 0.1
+							amountOfMats = 0.30  -- 1-2, 20% chance = 1.5*0.20
 						},
+					},
+				},
+				[WEAPON] = {
+					[2] = {
+						{
+							minItemLevel = 26,
+							maxItemLevel = 30,
+							amountOfMats = 1.125 -- 1-2, 75% chance = 1.5*0.75
+						},
+						{
+							minItemLevel = 31,
+							maxItemLevel = 35,
+							amountOfMats = 1.125 -- 1-2, 75% chance = 1.5*0.75 (Hacking Cleaver ilvl33)
+						},
+					},
+				},
+			},
+		},
+		["item:11135:0:0:0:0:0:0"] = {
+			-- Greater Mystic Essence
+			name = GetItemInfo("item:11135:0:0:0:0:0:0"),
+			minLevel = 31,
+			maxLevel = 40,
+			itemTypes = {
+				[ARMOR] = {
+					[2] = {
 						{
 							minItemLevel = 36,
 							maxItemLevel = 40,
@@ -504,11 +561,6 @@ data.disenchant = {
 				},
 				[WEAPON] = {
 					[2] = {
-						{
-							minItemLevel = 31,
-							maxItemLevel = 35,
-							amountOfMats = 0.375
-						},
 						{
 							minItemLevel = 36,
 							maxItemLevel = 40,
