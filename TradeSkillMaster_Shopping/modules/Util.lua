@@ -382,6 +382,11 @@ function private:ScanComplete(interrupted)
 		if #private.searchFrame.rt.auctionData == 0 and TSM.moduleAPICallback then
 			TSM.moduleAPICallback()
 		end
+		-- Notifica a AuctionDB para actualizar el Market Value con los datos del scan actual.
+		-- Esto permite que el % Market Value se actualice tras cada búsqueda sin Full Scan.
+		if private.auctions and next(private.auctions) then
+			TSM:OnSearchScanDone(private.auctions)
+		end
 		private.callback("done", private.auctions)
 		TSMAPI:FireEvent("SHOPPING:SEARCH:SCANDONE", #private.searchFrame.rt.auctionData)
 	end
