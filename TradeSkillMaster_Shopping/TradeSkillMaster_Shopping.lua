@@ -91,6 +91,14 @@ function TSM:GetOperationInfo(operationName)
 	end
 end
 
+-- Llamado por Search.lua cuando una búsqueda exacta termina con datos de scan.
+-- scanData tiene el mismo formato que SCAN_COMPLETE de AuctionScan (tabla itemString -> obj).
+function TSM:OnSearchScanDone(scanData)
+	if scanData then
+		TSMAPI:ModuleAPI("AuctionDB", "updateFromShopping", scanData)
+	end
+end
+
 function TSM:StartFilterSearch(searchQuery, callback)
 	if not TSMAPI:AHTabIsVisible("Shopping") then return end
 	TSM.Search:StartFilterSearch(searchQuery, nil, true)
