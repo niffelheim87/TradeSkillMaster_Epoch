@@ -100,7 +100,7 @@ function TSM:LoadAuctionData()
 			TSM:ProcessAppData(itemID)
 			if type(TSM.data[itemID].scans) == "table" then
 				local temp = {}
-				for i=0, 14 do
+				for i=0, 7 do
 					if i <= TSM.MAX_AVG_DAY then
 						temp[currentDay-i] = TSM.Data:ConvertScansToAvg(TSM.data[itemID].scans[currentDay-i])
 					else
@@ -288,6 +288,36 @@ function TSM:GetTooltip(itemString, quantity)
 						tinsert(text, { left = "  " .. L["Min Buyout:"], right = TSMAPI:FormatTextMoney(minBuyout, "|cffffffff", true) })
 					end
 				end
+			end
+		end
+	end
+
+	-- add daily price history when Shift is held
+	if IsShiftKeyDown() and TSM.data[itemID].scans then
+		local currentDay = TSM.Data:GetDay()
+		local hasHistory = false
+		for i = 0, 6 do
+			local day = currentDay - i
+			local dayData = TSM.data[itemID].scans[day]
+			local dayValue
+			if type(dayData) == "table" then
+				dayValue = dayData.avg
+			elseif type(dayData) == "number" then
+				dayValue = dayData
+			end
+			if dayValue and dayValue > 0 then
+				if not hasHistory then
+					tinsert(text, { left = "|cffffff00  Price History:|r", right = "" })
+					hasHistory = true
+				end
+				local dayLabel = i == 0 and "  Today" or (i == 1 and "  Yesterday" or format("  %d days ago", i))
+				local priceText
+				if moneyCoinsTooltip then
+					priceText = TSMAPI:FormatTextMoneyIcon(dayValue, "|cffffffff", true)
+				else
+					priceText = TSMAPI:FormatTextMoney(dayValue, "|cffffffff", true)
+				end
+				tinsert(text, { left = "|cffaaaaaa" .. dayLabel .. ":|r", right = priceText })
 			end
 		end
 	end
